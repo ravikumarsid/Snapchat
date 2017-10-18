@@ -17,6 +17,7 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var nextButton: UIButton!
     
     var imagePicker = UIImagePickerController()
+    var uuid = NSUUID().uuidString
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,14 +50,14 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         
         
-        imagesFolder.child("\(NSUUID().uuidString).jpg").putData(imageData!, metadata: nil) { (metadata, error) in
+        imagesFolder.child("\(uuid).jpg").putData(imageData!, metadata: nil) { (metadata, error) in
             print("We tried to upload!")
             if error != nil {
                 print("We had an error:\(String(describing: error))")
             } else {
                 print(metadata?.downloadURL()! as Any)
                 
-                self.performSegue(withIdentifier: "selectUserSegue", sender: nil)
+                self.performSegue(withIdentifier: "selectUserSegue", sender: metadata?.downloadURL()!.absoluteString)
             }
         }
         
@@ -65,6 +66,10 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        let nextVC = segue.destination as! SelectUserViewController
+        nextVC.imageURL = sender as! String
+        nextVC.descrip = descriptionTextField.text!
+        nextVC.uuid = uuid
         
     }
     

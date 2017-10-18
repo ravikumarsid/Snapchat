@@ -63,10 +63,13 @@ class SnapsViewController: UIViewController,UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        if snaps.count == 0 {}
+        if snaps.count == 0 {
+            cell.textLabel?.text = "You have no snaps!😞"
+        } else {
         
         let snap = snaps[indexPath.row]
         cell.textLabel?.text = snap.from
+        }
         return cell
     }
     
